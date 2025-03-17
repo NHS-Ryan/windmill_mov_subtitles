@@ -1,0 +1,53 @@
+---
+title: "Automated Subtitling Market Segmentation"
+author: "Ryan Lord"
+date: "2025-03-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+Check if required packages are installed and install if necessary. 
+Add packages to library. 
+```{r,warning=FALSE}
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+if (!requireNamespace("tidyverse", quietly = TRUE)) {
+  install.packages("tidyverse")
+}
+if (!requireNamespace("readr", quietly = TRUE)) {
+  install.packages("readr")
+}
+if (!requireNamespace("rworldmap", quietly = TRUE)) {
+  install.packages("rworldmap")
+}
+
+library(ggplot2)   # data visualisation
+library(tidyverse) # data wrangling
+library(readr)     # import .csv from github
+library(rworldmap) # visualise data on a world map
+
+```
+
+
+
+Import data from our github repo: https://github.com/NHS-Ryan/windmill_mov_subtitles
+```{r, warning=FALSE}
+
+country_information <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/country_information.csv")
+
+head(country_information)
+
+```
+
+```{r}
+
+```
+
