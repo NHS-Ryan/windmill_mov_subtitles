@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-test3
+
 
 Check if required packages are installed and install if necessary. 
 Add packages to library. 
@@ -22,14 +22,14 @@ if (!requireNamespace("tidyverse", quietly = TRUE)) {
 if (!requireNamespace("readr", quietly = TRUE)) {
   install.packages("readr")
 }
-if (!requireNamespace("rworldmap", quietly = TRUE)) {
-  install.packages("rworldmap")
+if (!requireNamespace("treemapify", quietly = TRUE)) {
+  install.packages("treemapify")
 }
 
-library(ggplot2)   # data visualisation
-library(tidyverse) # data wrangling
-library(readr)     # import .csv from github
-library(rworldmap) # visualise data on a world map
+library(ggplot2)    # data visualisation
+library(tidyverse)  # data wrangling
+library(readr)      # import .csv from github
+library(treemapify) # create tree maps
 
 ```
 
@@ -39,12 +39,122 @@ Import data from our github repo: https://github.com/NHS-Ryan/windmill_mov_subti
 ```{r, warning=FALSE}
 
 country_information <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/country_information.csv")
+supported_languages <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/supported_languages.csv")
+
 
 head(country_information)
+head(supported_languages)
 
 ```
 
+
+Plot of supported translation markets vs all others supported_language_flag = 
 ```{r}
 
+country_information %>%
+  filter(,by = )
+
+```
+
+
+
+Join to Windmill Pictures' Supported Languages information so we can exclude countries with languages we are already working with. 
+```{r}
+
+supported_languages$supported_language_flag = 0
+
+country_information <- left_join(country_information, supported_languages, 
+                                 by = c("primary_language" = "supported_languages")
+                                 )
+
+country_information$supported_language_flag <- country_information$supported_language_flag %>%
+  replace_na(1)
+
+country_information
+
+```
+
+
+We now want to do the final work to prepare our data to create our market_score. Market Score is a score out of 10 where a country scoring a full 10 points would have the largest population, highest median income & strong 5 year GDP growth:
+
+The market score takes 3 parameters: target_population ,average_gdp_change_5_years & median_income. 
+
+2 of the parameters are already available in our country_information dataframe, but target_population needs to be calculated as follows: 
+
+target_population = supported_language_flag * (primarly_language_speakers - (english_speakers_l1 + english_speakers_l2))
+median_income
+
+We then take the 3 parameters, rank them from highest to lowest, and normalise the result from 0 to 1. Finally we apply the following weights to give a final score out of 10: 
+average_gdp_change_5_years_norm * 2.5 + 
+median_income * 2.5 + 
+target_population * 5 + 
+= market_score
+
+
+
+```{r}
+
+normalise <- function(x) {
+  return((x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE)))
+}
+
+country_information$median_income_score <-
+  normalise(rank(country_information$median_income)) * 2.5
+
+country_information$avg_gdp_change_5_years_score <-
+  normalise(rank(country_information$avg_gdp_change_5_years)) * 2.5
+
+country_information$target_population_score <-
+  country_information$supported_language_flag * 
+  ((country_information$english_speakers_l1 + 
+        country_information$english_speakers_l2)
+   ) * 5
+
+country_information$market_score <-
+  (country_information$median_income_score + 
+     country_information$avg_gdp_change_5_years_score +
+     country_information$target_population_score) *
+  country_information$supported_language_flag
+
+
+```
+
+
+
+Create a Treemap of languages including an 'unsupported_languages' category to demonstrate how much of the overall global market we are missing. 
+```{r}
+
+temp_df <- data.frame(primary_language = character(),
+                      total_value = numeric())
+
+unsupported_val = (country_information %>%
+         filter(supported_language_flag == 1) %>%
+         summarize(total_value = sum(population)))$total_value[1]
+
+temp_df <- temp_df %>% add_row(
+  primary_language = "Unsupported Languages",
+  total_value = unsupported_val)
+
+country_information %>%
+  select(country,population,
+         primary_language,supported_language_flag) %>%
+  filter(supported_language_flag == 0) %>%
+  group_by(primary_language) %>%
+  summarise(total_value = sum(population, na.rm = TRUE)) %>%
+  add_row(temp_df) %>%
+  mutate(primary_language = str_to_title(primary_language)) %>%
+  group_by(primary_language) %>%
+  summarise(total_value = (total_value = sum(round(total_value / 1000000,1)))) %>%
+  arrange(desc(total_value)) %>%
+  ggplot(aes(area = total_value, fill = primary_language,
+               label = paste(primary_language, total_value, 
+                             sep = "\n"))) +
+    geom_treemap() +
+    geom_treemap_text(colour = "white",
+                      place = "topleft",
+                      size = 15) +
+    theme(legend.position = "none") +
+    scale_fill_brewer(palette = "Reds") +
+    labs(title = "Millions of Speakers...")
 ```
 
