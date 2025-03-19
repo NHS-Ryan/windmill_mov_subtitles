@@ -1,258 +1,145 @@
-country,avg_gdp_change_5_years
-Afghanistan,-4.541524365
-Africa Eastern and Southern,1.956086997
-Africa Western and Central,2.68219013
-Albania,3.296343671
-Algeria,1.48
-American Samoa,1.219125747
-Andorra,2.253310712
-Angola,-0.219052254
-Antigua and Barbuda,1.158034448
-Arab World,1.529044245
-Argentina,0.439868845
-Armenia,5.42
-Aruba,1.69400074
-Australia,2.369500045
-Austria,0.910996424
-Azerbaijan,1.931045537
-"Bahamas, The",1.20869797
-Bahrain,1.890730259
-Bangladesh,6.228710595
-Barbados,1.453987945
-Belarus,0.488084176
-Belgium,1.86751853
-Belize,3.782578299
-Benin,6.09519944
-Bermuda,1.043760467
-Bhutan,1.292996578
-Bolivia,1.255567944
-Bosnia and Herzegovina,2.740029204
-Botswana,2.888782581
-Brazil,1.726359649
-Brunei Darussalam,0.638078375
-Bulgaria,2.855864033
-Burkina Faso,3.859984747
-Burundi,1.95774445
-Cabo Verde,2.89903843
-Cambodia,3.506901304
-Cameroon,2.811795871
-Canada,1.445189804
-Caribbean small states,7.504193193
-Cayman Islands,2.676352769
-Central African Republic,1.271056289
-Central Europe and the Baltics,2.383228709
-Chad,1.480929709
-Channel Islands,2.334068898
-Chile,1.620474112
-China,4.967567264
-Colombia,2.94028658
-Comoros,1.832814058
-"Congo, Dem. Rep.",5.961083157
-"Congo, Rep.",-0.149201519
-Costa Rica,3.148666671
-Cote d'Ivoire,5.380456057
-Croatia,3.602195635
-Cuba,-2.002523304
-Curacao,-1.270578123
-Cyprus,4.804048737
-Czechia,1.010351143
-Denmark,2.269743737
-Djibouti,4.35781354
-Dominica,1.216941556
-Dominican Republic,3.564571721
-Early-demographic dividend,3.084808392
-East Asia & Pacific,3.404236798
-East Asia & Pacific (excluding high income),4.624787681
-East Asia & Pacific (IDA & IBRD countries),4.624663176
-Ecuador,1.856016377
-"Egypt, Arab Rep.",4.547890016
-El Salvador,2.551932234
-Equatorial Guinea,-2.255687332
-Estonia,1.006936523
-Eswatini,2.0843365
-Ethiopia,6.376891646
-Euro area,1.177667766
-Europe & Central Asia,1.490268823
-Europe & Central Asia (excluding high income),3.958032032
-Europe & Central Asia (IDA & IBRD countries),2.801522005
-European Union,1.316422678
-Faroe Islands,2.89013024
-Fiji,0.963073524
-Finland,0.375900194
-Fragile and conflict affected situations,0.524241055
-France,0.995293278
-French Polynesia,0.552451851
-Gabon,1.806900074
-"Gambia, The",4.472003284
-Georgia,5.705042898
-Germany,0.333209673
-Ghana,3.77209467
-Greece,1.962244018
-Greenland,1.436665616
-Grenada,0.498847377
-Guam,-0.209302505
-Guatemala,3.598512347
-Guinea,5.324236106
-Guinea-Bissau,4.606701375
-Guyana,33.20594481
-Haiti,-2.074542106
-Heavily indebted poor countries (HIPC),3.543128216
-High income,1.699128508
-Honduras,2.777200411
-"Hong Kong SAR, China",-0.433959089
-Hungary,2.222824403
-IBRD only,3.662376574
-Iceland,2.840924331
-IDA & IBRD total,3.613195916
-IDA blend,2.655370821
-IDA only,3.337848455
-IDA total,3.013136552
-India,4.584656072
-Indonesia,3.40243732
-"Iran, Islamic Rep.",2.760200024
-Iraq,-0.063313629
-Ireland,6.308711711
-Isle of Man,-1.581367316
-Israel,4.111564394
-Italy,1.170279807
-Jamaica,0.598995006
-Japan,0.12875772
-Jordan,1.925967702
-Kazakhstan,2.92
-Kenya,4.569547212
-Kiribati,3.850969485
-"Korea, Rep.",1.961740551
-Kosovo,3.701661429
-Kuwait,0.385195474
-Kyrgyz Republic,3.615510549
-Lao PDR,2.988445171
-Late-demographic dividend,3.92791028
-Latin America & Caribbean,1.438085036
-Latin America & Caribbean (excluding high income),1.3884187
-Latin America & the Caribbean (IDA & IBRD countries),1.517867684
-Latvia,1.534571384
-Least developed countries: UN classification,3.172978919
-Lebanon,-8.984435504
-Lesotho,-0.6185673
-Liberia,1.805757197
-Libya,-2.082745803
-Lithuania,2.79599398
-Low & middle income,3.743604198
-Low income,2.540871968
-Lower middle income,3.70475969
-Luxembourg,1.891776476
-"Macao SAR, China",4.417681453
-Madagascar,2.162635249
-Malawi,2.77645736
-Malaysia,2.937799882
-Maldives,6.089971701
-Mali,2.941010326
-Malta,5.143343798
-Marshall Islands,0.76971217
-Mauritania,3.365251041
-Mauritius,1.517343621
-Mexico,0.838170125
-"Micronesia, Fed. Sts.",0.98539039
-Middle East & North Africa,2.051606553
-Middle East & North Africa (excluding high income),1.854969672
-Middle East & North Africa (IDA & IBRD countries),1.881076218
-Middle income,3.761485664
-Moldova,0.994819189
-Monaco,6.440864459
-Mongolia,3.027216844
-Montenegro,2.908778672
-Morocco,1.75961022
-Mozambique,2.655407409
-Myanmar,-1.897933907
-Namibia,0.834584971
-Nauru,4.257697341
-Nepal,3.341888721
-Netherlands,1.958152849
-New Caledonia,-0.600000001
-New Zealand,1.998289636
-Nicaragua,2.79692368
-Niger,5.054818006
-Nigeria,2.034651827
-North America,2.30270534
-North Macedonia,1.71285659
-Northern Mariana Islands,-4.723671946
-Norway,1.447915055
-OECD members,1.747055769
-Oman,1.792272538
-Other small states,2.572560307
-Pacific island small states,0.57231687
-Pakistan,2.495169918
-Palau,-3.806938613
-Panama,3.983586053
-Papua New Guinea,1.909003592
-Paraguay,1.537051854
-Peru,1.367574537
-Philippines,3.088359471
-Poland,2.973272348
-Portugal,1.922386645
-Post-demographic dividend,1.593105189
-Pre-demographic dividend,2.046249617
-Puerto Rico,0.402288376
-Qatar,0.825930662
-Romania,2.432833702
-Russian Federation,1.337800013
-Rwanda,6.666137253
-Samoa,-0.491523144
-San Marino,4.303501324
-Sao Tome and Principe,1.415885279
-Saudi Arabia,1.864475743
-Senegal,4.181925602
-Serbia,3.645539605
-Seychelles,2.493055713
-Sierra Leone,4.233957912
-Singapore,2.415827043
-Sint Maarten (Dutch part),3.165162021
-Slovak Republic,1.449077268
-Slovenia,2.524346647
-Small states,3.321001709
-Solomon Islands,1.282804004
-Somalia,2.094711775
-South Africa,0.331203122
-South Asia,4.239396886
-South Asia (IDA & IBRD),4.239396886
-Spain,1.311845555
-Sri Lanka,-2.056464845
-St. Kitts and Nevis,0.152858269
-St. Lucia,1.826859901
-St. Martin (French part),-0.366666313
-St. Vincent and the Grenadines,2.170464109
-Sub-Saharan Africa,2.289410833
-Sub-Saharan Africa (excluding high income),2.289450476
-Sub-Saharan Africa (IDA & IBRD countries),2.289410833
-Sudan,-5.749192983
-Suriname,-2.459439734
-Sweden,1.526087449
-Switzerland,1.535305641
-Syrian Arab Republic,0.77763698
-Tajikistan,7.500000077
-Tanzania,4.34977564
-Thailand,0.396545537
-Timor-Leste,4.519938978
-Togo,5.014684342
-Tonga,-0.093075153
-Trinidad and Tobago,-1.384824135
-Tunisia,0.004941613
-Turkiye,4.952475864
-Turkmenistan,6.180031526
-Turks and Caicos Islands,-1.009302784
-Tuvalu,3.176284168
-Uganda,4.570325335
-Ukraine,-4.108388452
-United Arab Emirates,2.326890914
-United Kingdom,1.016511699
-United States,2.375156091
-Upper middle income,3.780007631
-Uruguay,0.836966954
-Uzbekistan,5.734141714
-Vanuatu,0.165080024
-Viet Nam,5.189669928
-Virgin Islands (U.S.),0.912443084
-West Bank and Gaza,-0.854394618
-World,2.443852528
-Zambia,3.094067893
-Zimbabwe,1.158922721
+"country","avg_gdp_change_5_years"
+"Afghanistan",-4.541524365
+"Albania",3.296343671
+"Algeria",1.48
+"American Samoa",1.219125747
+"Andorra",2.253310712
+"Antigua and Barbuda",1.158034448
+"Argentina",0.439868845
+"Armenia",5.42
+"Aruba",1.69400074
+"Australia",2.369500045
+"Austria",0.910996424
+"Azerbaijan",1.931045537
+"Bahrain",1.890730259
+"Bangladesh",6.228710595
+"Barbados",1.453987945
+"Belarus",0.488084176
+"Belgium",1.86751853
+"Belize",3.782578299
+"Bermuda",1.043760467
+"Bhutan",1.292996578
+"Botswana",2.888782581
+"Brazil",1.726359649
+"Bulgaria",2.855864033
+"Cambodia",3.506901304
+"Cameroon",2.811795871
+"Canada",1.445189804
+"Cayman Islands",2.676352769
+"Chile",1.620474112
+"China",4.967567264
+"Colombia",2.94028658
+"Costa Rica",3.148666671
+"Croatia",3.602195635
+"Cyprus",4.804048737
+"Denmark",2.269743737
+"Dominica",1.216941556
+"Dominican Republic",3.564571721
+"Ecuador",1.856016377
+"Egypt",4.547890016
+"El Salvador",2.551932234
+"Estonia",1.006936523
+"Eswatini",2.0843365
+"Ethiopia",6.376891646
+"Fiji",0.963073524
+"Finland",0.375900194
+"France",0.995293278
+"Germany",0.333209673
+"Ghana",3.77209467
+"Greece",1.962244018
+"Greenland",1.436665616
+"Grenada",0.498847377
+"Guam",-0.209302505
+"Guinea-Bissau",4.606701375
+"Guyana",33.20594481
+"Haiti",-2.074542106
+"Honduras",2.777200411
+"Hungary",2.222824403
+"Iceland",2.840924331
+"India",4.584656072
+"Indonesia",3.40243732
+"Iraq",-0.063313629
+"Isle of Man",-1.581367316
+"Israel",4.111564394
+"Italy",1.170279807
+"Jamaica",0.598995006
+"Japan",0.12875772
+"Jordan",1.925967702
+"Kazakhstan",2.92
+"Kenya",4.569547212
+"Kiribati",3.850969485
+"Kuwait",0.385195474
+"Latvia",1.534571384
+"Lebanon",-8.984435504
+"Lesotho",-0.6185673
+"Liberia",1.805757197
+"Libya",-2.082745803
+"Lithuania",2.79599398
+"Luxembourg",1.891776476
+"Madagascar",2.162635249
+"Malawi",2.77645736
+"Malaysia",2.937799882
+"Maldives",6.089971701
+"Malta",5.143343798
+"Marshall Islands",0.76971217
+"Mauritius",1.517343621
+"Mexico",0.838170125
+"Monaco",6.440864459
+"Montenegro",2.908778672
+"Morocco",1.75961022
+"Myanmar",-1.897933907
+"Namibia",0.834584971
+"Nauru",4.257697341
+"Nepal",3.341888721
+"Netherlands",1.958152849
+"New Zealand",1.998289636
+"Nicaragua",2.79692368
+"Nigeria",2.034651827
+"Northern Mariana Islands",-4.723671946
+"Norway",1.447915055
+"Oman",1.792272538
+"Pakistan",2.495169918
+"Palau",-3.806938613
+"Panama",3.983586053
+"Papua New Guinea",1.909003592
+"Peru",1.367574537
+"Philippines",3.088359471
+"Poland",2.973272348
+"Portugal",1.922386645
+"Puerto Rico",0.402288376
+"Qatar",0.825930662
+"Romania",2.432833702
+"Russia",1.337800013
+"Rwanda",6.666137253
+"Samoa",-0.491523144
+"Saudi Arabia",1.864475743
+"Serbia",3.645539605
+"Seychelles",2.493055713
+"Sierra Leone",4.233957912
+"Singapore",2.415827043
+"Slovakia",1.449077268
+"Slovenia",2.524346647
+"Solomon Islands",1.282804004
+"Somalia",2.094711775
+"South Africa",0.331203122
+"Spain",1.311845555
+"Sri Lanka",-2.056464845
+"Sudan",-5.749192983
+"Suriname",-2.459439734
+"Sweden",1.526087449
+"Switzerland",1.535305641
+"Tanzania",4.34977564
+"Thailand",0.396545537
+"Tonga",-0.093075153
+"Trinidad and Tobago",-1.384824135
+"Tunisia",0.004941613
+"Turkey",4.952475864
+"Tuvalu",3.176284168
+"Uganda",4.570325335
+"Ukraine",-4.108388452
+"United Arab Emirates",2.326890914
+"United States",2.375156091
+"Uruguay",0.836966954
+"Vanuatu",0.165080024
+"Zambia",3.094067893
+"Zimbabwe",1.158922721
