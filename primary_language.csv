@@ -1,196 +1,196 @@
-country,primary_language,primary_language_speakers
-Afghanistan,Dari Persian,0.77
-Albania,Albanian,0.99
-Algeria,Arabic,0.81
-Andorra,Catalan,0.39
-Angola,Portuguese,0.71
-Antigua and Barbuda,English,0.95
-Argentina,Spanish,0.99
-Armenia,Armenian,0.98
-Australia,English,0.72
-Austria,German,0.89
-Azerbaijan,Azerbaijani,0.93
-Bahamas,English,0.91
-Bahrain,Arabic,0.8
-Bangladesh,Bengali,0.99
-Barbados,English,0.95
-Belarus,Russian,0.7
-Belgium,Dutch,0.6
-Belize,English,0.63
-Benin,French,0.43
-Bhutan,Dzongkha,0.24
-Bolivia,Spanish,0.61
-Bosnia and Herzegovina,Bosnian,0.53
-Botswana,English,0.77
-Brazil,Portuguese,0.98
-Brunei,Malay,0.68
-Bulgaria,Bulgarian,0.85
-Burkina Faso,French,0.15
-Burundi,Kirundi,0.98
-Cabo Verde,Portuguese,0.58
-Cambodia,Khmer,0.96
-Cameroon,French,0.7
-Canada,English,0.56
-Central African Republic,Sango,0.9
-Chad,French,0.4
-Chile,Spanish,1
-China,Mandarin Chinese,0.7
-Colombia,Spanish,0.99
-Comoros,Comorian,0.97
-"Congo, Democratic Rep.",French,0.49
-"Congo, Republic of the",French,0.43
-Costa Rica,Spanish,0.97
-Croatia,Croatian,0.96
-Cuba,Spanish,1
-Cyprus,Greek,0.81
-Czech Republic,Czech,0.99
-Denmark,Danish,0.86
-Djibouti,Somali,0.6
-Dominica,English,0.94
-Dominican Republic,Spanish,0.98
-East Timor,Tetum,0.91
-Ecuador,Spanish,0.93
-Egypt,Arabic,0.93
-El Salvador,Spanish,0.9
-Equatorial Guinea,Spanish,0.68
-Eritrea,Tigrinya,0.55
-Estonia,Estonian,0.69
-Eswatini,Swazi,0.77
-Ethiopia,Amharic,0.29
-Fiji,English,0.54
-Finland,Finnish,0.88
-France,French,0.88
-Gabon,French,0.8
-Gambia,English,0.45
-Georgia,Georgian,0.88
-Germany,German,0.95
-Ghana,English,0.67
-Greece,Greek,0.99
-Grenada,English,0.89
-Guatemala,Spanish,0.7
-Guinea,French,0.24
-Guinea-Bissau,Portuguese,0.15
-Guyana,English,0.91
-Haiti,Haitian Creole,0.95
-Honduras,Spanish,0.9
-Hungary,Hungarian,1
-Iceland,Icelandic,0.93
-India,Hindi,0.44
-Indonesia,Indonesian,0.94
-Iran,Persian (Farsi),0.53
-Iraq,Arabic,0.79
-Ireland,English,0.98
-Israel,Hebrew,0.49
-Italy,Italian,0.93
-Jamaica,English,0.88
-Japan,Japanese,0.99
-Jordan,Arabic,0.98
-Kazakhstan,Kazakh,0.83
-Kenya,English,0.19
-Kiribati,Gilbertese,0.97
-"Korea, North",Korean,1
-"Korea, South",Korean,0.99
-Kosovo,Albanian,0.95
-Kuwait,Arabic,0.85
-Kyrgyzstan,Kyrgyz,0.71
-Laos,Lao,0.53
-Latvia,Latvian,0.56
-Lebanon,Arabic,0.93
-Lesotho,Sesotho,0.85
-Liberia,English,0.2
-Libya,Arabic,0.95
-Liechtenstein,German,0.87
-Lithuania,Lithuanian,0.82
-Luxembourg,Luxembourgish,0.56
-Madagascar,Malagasy,0.99
-Malawi,Chichewa,0.57
-Malaysia,Malay,0.8
-Maldives,Dhivehi,0.97
-Mali,Bambara,0.46
-Malta,Maltese,0.9
-Marshall Islands,Marshallese,0.98
-Mauritania,Arabic,0.7
-Mauritius,Creole,0.87
-Mexico,Spanish,0.98
-"Micronesia, Fed. States",English,0.89
-Moldova,Romanian,0.76
-Monaco,French,0.6
-Mongolia,Mongolian,0.9
-Montenegro,Montenegrin,0.37
-Morocco,Arabic,0.9
-Mozambique,Portuguese,0.5
-Myanmar,Burmese,0.68
-Namibia,Oshiwambo,0.49
-Nauru,Nauruan,0.97
-Nepal,Nepali,0.45
-Netherlands,Dutch,0.9
-New Zealand,English,0.95
-Nicaragua,Spanish,0.95
-Niger,Hausa,0.53
-Nigeria,English,0.53
-North Macedonia,Macedonian,0.67
-Norway,Norwegian,0.95
-Oman,Arabic,0.9
-Pakistan,Punjabi,0.48
-Palau,Palauan,0.73
-Panama,Spanish,0.93
-Papua New Guinea,Tok Pisin,0.5
-Paraguay,Spanish,0.69
-Peru,Spanish,0.83
-Philippines,Filipino,0.45
-Poland,Polish,0.98
-Portugal,Portuguese,0.96
-Qatar,Arabic,0.8
-Romania,Romanian,0.85
-Russia,Russian,0.86
-Rwanda,Kinyarwanda,0.93
-Saint Kitts & Nevis,English,0.95
-Saint Lucia,English,0.9
-Saint Vincent & Grenadines,English,0.91
-Samoa,Samoan,0.97
-San Marino,Italian,0.94
-São Tomé & Príncipe,Portuguese,0.91
-Saudi Arabia,Arabic,0.9
-Senegal,Wolof,0.37
-Serbia,Serbian,0.88
-Seychelles,Seychellois Creole,0.91
-Sierra Leone,Krio,0.97
-Singapore,English,0.37
-Slovakia,Slovak,0.79
-Slovenia,Slovenian,0.91
-Solomon Islands,Pijin,0.71
-Somalia,Somali,0.85
-South Africa,Zulu,0.25
-South Sudan,English,0.44
-Spain,Spanish,0.98
-Sri Lanka,Sinhala,0.87
-Sudan,Arabic,0.71
-Suriname,Dutch,0.64
-Sweden,Swedish,0.95
-Switzerland,German,0.63
-Syria,Arabic,0.85
-Taiwan,Mandarin Chinese,0.83
-Tajikistan,Tajik,0.87
-Tanzania,Swahili,0.9
-Thailand,Thai,0.88
-Togo,French,0.42
-Tonga,Tongan,0.96
-Trinidad & Tobago,English,0.96
-Tunisia,Arabic,0.96
-Turkey,Turkish,0.9
-Turkmenistan,Turkmen,0.72
-Tuvalu,Tuvaluan,0.97
-Uganda,English,0.45
-Ukraine,Ukrainian,0.67
-United Arab Emirates,Arabic,0.8
-United Kingdom,English,0.98
-United States,English,0.78
-Uruguay,Spanish,0.99
-Uzbekistan,Uzbek,0.85
-Vanuatu,Bislama,0.68
-Vatican City,Italian,1
-Venezuela,Spanish,0.97
-Vietnam,Vietnamese,0.88
-Yemen,Arabic,0.9
-Zambia,Bemba,0.37
-Zimbabwe,Shona,0.77
+"country","primary_language","primary_language_speakers"
+"Afghanistan","Dari Persian",0.77
+"Albania","Albanian",0.99
+"Algeria","Arabic",0.81
+"Andorra","Catalan",0.39
+"Angola","Portuguese",0.71
+"Antigua and Barbuda","English",0.95
+"Argentina","Spanish",0.99
+"Armenia","Armenian",0.98
+"Australia","English",0.72
+"Austria","German",0.89
+"Azerbaijan","Azerbaijani",0.93
+"Bahamas","English",0.91
+"Bahrain","Arabic",0.8
+"Bangladesh","Bengali",0.99
+"Barbados","English",0.95
+"Belarus","Russian",0.7
+"Belgium","Dutch",0.6
+"Belize","English",0.63
+"Benin","French",0.43
+"Bhutan","Dzongkha",0.24
+"Bolivia","Spanish",0.61
+"Bosnia and Herzegovina","Bosnian",0.53
+"Botswana","English",0.77
+"Brazil","Portuguese",0.98
+"Brunei","Malay",0.68
+"Bulgaria","Bulgarian",0.85
+"Burkina Faso","French",0.15
+"Burundi","Kirundi",0.98
+"Cabo Verde","Portuguese",0.58
+"Cambodia","Khmer",0.96
+"Cameroon","French",0.7
+"Canada","English",0.56
+"Central African Republic","Sango",0.9
+"Chad","French",0.4
+"Chile","Spanish",1
+"China","Mandarin Chinese",0.7
+"Colombia","Spanish",0.99
+"Comoros","Comorian",0.97
+"Congo, Democratic Rep.","French",0.49
+"Congo, Republic of the","French",0.43
+"Costa Rica","Spanish",0.97
+"Croatia","Croatian",0.96
+"Cuba","Spanish",1
+"Cyprus","Greek",0.81
+"Czech Republic (Czechia)","Czech",0.99
+"Denmark","Danish",0.86
+"Djibouti","Somali",0.6
+"Dominica","English",0.94
+"Dominican Republic","Spanish",0.98
+"East Timor","Tetum",0.91
+"Ecuador","Spanish",0.93
+"Egypt","Arabic",0.93
+"El Salvador","Spanish",0.9
+"Equatorial Guinea","Spanish",0.68
+"Eritrea","Tigrinya",0.55
+"Estonia","Estonian",0.69
+"Eswatini","Swazi",0.77
+"Ethiopia","Amharic",0.29
+"Fiji","English",0.54
+"Finland","Finnish",0.88
+"France","French",0.88
+"Gabon","French",0.8
+"Gambia","English",0.45
+"Georgia","Georgian",0.88
+"Germany","German",0.95
+"Ghana","English",0.67
+"Greece","Greek",0.99
+"Grenada","English",0.89
+"Guatemala","Spanish",0.7
+"Guinea","French",0.24
+"Guinea-Bissau","Portuguese",0.15
+"Guyana","English",0.91
+"Haiti","Haitian Creole",0.95
+"Honduras","Spanish",0.9
+"Hungary","Hungarian",1
+"Iceland","Icelandic",0.93
+"India","Hindi",0.44
+"Indonesia","Indonesian",0.94
+"Iran","Persian (Farsi)",0.53
+"Iraq","Arabic",0.79
+"Ireland","English",0.98
+"Israel","Hebrew",0.49
+"Italy","Italian",0.93
+"Jamaica","English",0.88
+"Japan","Japanese",0.99
+"Jordan","Arabic",0.98
+"Kazakhstan","Kazakh",0.83
+"Kenya","English",0.19
+"Kiribati","Gilbertese",0.97
+"Korea, North","Korean",1
+"South Korea","Korean",0.99
+"Kosovo","Albanian",0.95
+"Kuwait","Arabic",0.85
+"Kyrgyzstan","Kyrgyz",0.71
+"Laos","Lao",0.53
+"Latvia","Latvian",0.56
+"Lebanon","Arabic",0.93
+"Lesotho","Sesotho",0.85
+"Liberia","English",0.2
+"Libya","Arabic",0.95
+"Liechtenstein","German",0.87
+"Lithuania","Lithuanian",0.82
+"Luxembourg","Luxembourgish",0.56
+"Madagascar","Malagasy",0.99
+"Malawi","Chichewa",0.57
+"Malaysia","Malay",0.8
+"Maldives","Dhivehi",0.97
+"Mali","Bambara",0.46
+"Malta","Maltese",0.9
+"Marshall Islands","Marshallese",0.98
+"Mauritania","Arabic",0.7
+"Mauritius","Creole",0.87
+"Mexico","Spanish",0.98
+"Micronesia, Fed. States","English",0.89
+"Moldova","Romanian",0.76
+"Monaco","French",0.6
+"Mongolia","Mongolian",0.9
+"Montenegro","Montenegrin",0.37
+"Morocco","Arabic",0.9
+"Mozambique","Portuguese",0.5
+"Myanmar","Burmese",0.68
+"Namibia","Oshiwambo",0.49
+"Nauru","Nauruan",0.97
+"Nepal","Nepali",0.45
+"Netherlands","Dutch",0.9
+"New Zealand","English",0.95
+"Nicaragua","Spanish",0.95
+"Niger","Hausa",0.53
+"Nigeria","English",0.53
+"North Macedonia","Macedonian",0.67
+"Norway","Norwegian",0.95
+"Oman","Arabic",0.9
+"Pakistan","Punjabi",0.48
+"Palau","Palauan",0.73
+"Panama","Spanish",0.93
+"Papua New Guinea","Tok Pisin",0.5
+"Paraguay","Spanish",0.69
+"Peru","Spanish",0.83
+"Philippines","Filipino",0.45
+"Poland","Polish",0.98
+"Portugal","Portuguese",0.96
+"Qatar","Arabic",0.8
+"Romania","Romanian",0.85
+"Russia","Russian",0.86
+"Rwanda","Kinyarwanda",0.93
+"Saint Kitts & Nevis","English",0.95
+"Saint Lucia","English",0.9
+"Saint Vincent & Grenadines","English",0.91
+"Samoa","Samoan",0.97
+"San Marino","Italian",0.94
+"Sï¿½o Tomï¿½ & Prï¿½ncipe","Portuguese",0.91
+"Saudi Arabia","Arabic",0.9
+"Senegal","Wolof",0.37
+"Serbia","Serbian",0.88
+"Seychelles","Seychellois Creole",0.91
+"Sierra Leone","Krio",0.97
+"Singapore","English",0.37
+"Slovakia","Slovak",0.79
+"Slovenia","Slovenian",0.91
+"Solomon Islands","Pijin",0.71
+"Somalia","Somali",0.85
+"South Africa","Zulu",0.25
+"South Sudan","English",0.44
+"Spain","Spanish",0.98
+"Sri Lanka","Sinhala",0.87
+"Sudan","Arabic",0.71
+"Suriname","Dutch",0.64
+"Sweden","Swedish",0.95
+"Switzerland","German",0.63
+"Syria","Arabic",0.85
+"Taiwan","Mandarin Chinese",0.83
+"Tajikistan","Tajik",0.87
+"Tanzania","Swahili",0.9
+"Thailand","Thai",0.88
+"Togo","French",0.42
+"Tonga","Tongan",0.96
+"Trinidad & Tobago","English",0.96
+"Tunisia","Arabic",0.96
+"Turkey","Turkish",0.9
+"Turkmenistan","Turkmen",0.72
+"Tuvalu","Tuvaluan",0.97
+"Uganda","English",0.45
+"Ukraine","Ukrainian",0.67
+"United Arab Emirates","Arabic",0.8
+"United Kingdom","English",0.98
+"United States","English",0.78
+"Uruguay","Spanish",0.99
+"Uzbekistan","Uzbek",0.85
+"Vanuatu","Bislama",0.68
+"Vatican City","Italian",1
+"Venezuela","Spanish",0.97
+"Vietnam","Vietnamese",0.88
+"Yemen","Arabic",0.9
+"Zambia","Bemba",0.37
+"Zimbabwe","Shona",0.77
