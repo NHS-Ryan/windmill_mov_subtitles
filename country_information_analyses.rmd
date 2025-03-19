@@ -25,17 +25,24 @@ if (!requireNamespace("readr", quietly = TRUE)) {
 if (!requireNamespace("treemapify", quietly = TRUE)) {
   install.packages("treemapify")
 }
+if (!requireNamespace("DT", quietly = TRUE)) {
+  install.packages("DT")
+}
+
 
 library(ggplot2)    # data visualisation
 library(tidyverse)  # data wrangling
 library(readr)      # import .csv from github
 library(treemapify) # create tree maps
+library(DT)         # nicely formatted tables
+
 
 ```
 
 
-test2
+
 Import data from our github repo: https://github.com/NHS-Ryan/windmill_mov_subtitles
+Some small data cleaning required to account for NULL values in the country_information.csv file
 ```{r, warning=FALSE}
 
 country_information <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/country_information.csv")
@@ -44,15 +51,6 @@ supported_languages <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/wind
 
 head(country_information)
 head(supported_languages)
-
-```
-
-
-Plot of supported translation markets vs all others supported_language_flag = 
-```{r}
-
-country_information %>%
-  filter(,by = )
 
 ```
 
@@ -66,6 +64,22 @@ supported_languages$supported_language_flag = 0
 country_information <- left_join(country_information, supported_languages, 
                                  by = c("primary_language" = "supported_languages")
                                  )
+
+# Disable scientific notation for values
+options(scipen = 999) 
+
+
+# Replace "NULL" strings with 0 in english_speakers_l1 & convert to numeric
+country_information$english_speakers_l1[country_information$english_speakers_l1 == "NULL"] <- 0
+country_information$english_speakers_l1 <- as.numeric(country_information$english_speakers_l1)
+
+# Replace "NULL" strings with 0 in english_speakers_l2 & convert to numeric
+country_information$english_speakers_l2[country_information$english_speakers_l2 == "NULL"] <- 0
+country_information$english_speakers_l2 <- as.numeric(country_information$english_speakers_l2)
+
+# Create English Speakers total as a sum of l1 + l2 columns
+country_information$english_speakers_total <- 
+  country_information$english_speakers_l1 + country_information$english_speakers_l2
 
 country_information$supported_language_flag <- country_information$supported_language_flag %>%
   replace_na(1)
@@ -90,8 +104,6 @@ median_income * 2.5 +
 target_population * 5 + 
 = market_score
 
-
-
 ```{r}
 
 normalise <- function(x) {
@@ -99,16 +111,21 @@ normalise <- function(x) {
 }
 
 country_information$median_income_score <-
-  normalise(rank(country_information$median_income)) * 2.5
+  normalise(rank(country_information$median_income)) * 3.5
 
 country_information$avg_gdp_change_5_years_score <-
   normalise(rank(country_information$avg_gdp_change_5_years)) * 2.5
 
 country_information$target_population_score <-
-  country_information$supported_language_flag * 
-  ((country_information$english_speakers_l1 + 
-        country_information$english_speakers_l2)
-   ) * 5
+  normalise(rank(country_information$supported_language_flag * 
+  (
+    (
+    (country_information$population * country_information$primary_language_speakers) - 
+      country_information$english_speakers_total
+    )
+   )
+  )
+  ) * 4
 
 country_information$market_score <-
   (country_information$median_income_score + 
@@ -144,7 +161,7 @@ country_information %>%
   add_row(temp_df) %>%
   mutate(primary_language = str_to_title(primary_language)) %>%
   group_by(primary_language) %>%
-  summarise(total_value = (total_value = sum(round(total_value / 1000000,1)))) %>%
+  summarise(total_value = (total_value = sum(round(total_value / 1000000,0)))) %>%
   arrange(desc(total_value)) %>%
   ggplot(aes(area = total_value, fill = primary_language,
                label = paste(primary_language, total_value, 
@@ -156,5 +173,24 @@ country_information %>%
     theme(legend.position = "none") +
     scale_fill_brewer(palette = "Reds") +
     labs(title = "Millions of Speakers...")
+```
+
+
+
+Nicely formatted datatable with market_score:
+```{r}
+country_information %>%
+  select(country,primary_language,market_score) %>%
+  mutate(market_score = round(country_information$market_score,1)) %>%
+  filter(market_score > 0) %>%
+  arrange(desc(market_score)) %>%
+  datatable(options = list(pageLength = 5, autoWidth = TRUE)) %>%
+  formatStyle(
+    'market_score',
+    background = styleColorBar(country_information$market_score, 'red'),
+    backgroundSize = '100% 100%',
+    backgroundRepeat = 'no-repeat',
+    backgroundPosition = 'center'
+  )
 ```
 
