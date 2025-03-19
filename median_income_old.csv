@@ -11,7 +11,7 @@ Aruba,24724.86657
 Australia,45710.89045
 Austria,43281.73348
 Azerbaijan,3965.424396
-Bahamas,24896.44161
+"Bahamas, The",24896.44161
 Bangladesh,2567.444321
 Barbados,14760.30253
 Belarus,5812.021741
@@ -23,7 +23,7 @@ Bolivia,2656.573859
 Bosnia and Herzegovina,6019.153696
 Botswana,5455.567399
 Brazil,5775.839583
-Brunei,22736.00679
+Brunei Darussalam,22736.00679
 Bulgaria,10114.52352
 Burkina Faso,670.0551391
 Burundi,150.9325674
@@ -45,7 +45,7 @@ Costa Rica,11172.4316
 Cote d'Ivoire,2164.043178
 Croatia,14553.48421
 Cyprus,24687.48242
-Czech Republic (Czechia),19843.78291
+Czechia,19843.78291
 Denmark,58796.35993
 Djibouti,2747.300462
 Dominica,7024.401891
@@ -55,7 +55,7 @@ East Asia & Pacific,9664.180401
 East Asia & Pacific (excluding high income),7080.902082
 East Asia & Pacific (IDA & IBRD countries),7160.38863
 Ecuador,4420.825286
-Egypt,3184.810353
+"Egypt, Arab Rep.",3184.810353
 El Salvador,3710.660817
 Equatorial Guinea,2709.305292
 Estonia,22462.36475
@@ -70,7 +70,7 @@ Finland,44416.2002
 Fragile and conflict affected situations,1416.945612
 France,36447.57846
 Gabon,4438.451929
-Gambia,624.0718265
+"Gambia, The",624.0718265
 Georgia,4084.970574
 Germany,42982.48189
 Ghana,1841.535044
@@ -104,7 +104,7 @@ Kazakhstan,6362.631782
 Kenya,1789.596665
 Kiribati,2801.822185
 "Korea, Rep.",28058.83017
-Kyrgyzstan,870.465986
+Kyrgyz Republic,870.465986
 Lao PDR,1837.87641
 Late-demographic dividend,8406.774807
 Latin America & Caribbean,6415.208424
@@ -165,7 +165,7 @@ Post-demographic dividend,40472.14004
 Pre-demographic dividend,1107.918388
 Qatar,51676.65701
 Romania,12194.36363
-Russia,8992.818359
+Russian Federation,8992.818359
 Rwanda,673.7038349
 Samoa,3538.935249
 Sao Tome and Principe,1919.478424
@@ -185,7 +185,7 @@ South Asia (IDA & IBRD),1874.39354
 Spain,25118.45314
 Sri Lanka,3611.591236
 St. Lucia,7655.163071
-St. Vincent & Grenadines,7285.53157
+St. Vincent and the Grenadines,7285.53157
 Sub-Saharan Africa,1286.741922
 Sub-Saharan Africa (excluding high income),1285.834393
 Sub-Saharan Africa (IDA & IBRD countries),1286.741922
@@ -201,7 +201,7 @@ Togo,832.3096128
 Tonga,4284.021861
 Trinidad and Tobago,15142.81689
 Tunisia,3285.419777
-Turks and Caicos,18783.46716
+Turks and Caicos Islands,18783.46716
 Uganda,654.1257564
 Ukraine,3918.818359
 United States,59006.35854
