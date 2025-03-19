@@ -1,17 +1,26 @@
-# This script takes avg_gdp_change_5_years.csv held in repo and joins it to the 
-# ethnologue_data.csv which we have agreed has the standard naming convention 
-# for the primary key country field that all other files will conform to. 
+# This script takes the various .csv files we have crated and standardises the 
+# country name value so that data can be joined. 
+# In addition it does a final join to country_information to create the final 
+# file
 
 library(tidyverse)
 
 # Import files for standardisation
-# Ethnologue database is the chosen standard for country names in our overall 
-# country_information.csv dataset. 
+# Ethnologue database is the chosen standard for country names  
+# country_information.csv is the final target dataset. 
 eth_df <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/Ethnologue_english_language_Data.csv")
 gdp_df <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/avg_gdp_change_5_years.csv")
 pri_df <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/primary_language.csv")
+cou_df <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/country_information.csv")
+
+# Rename columns in country_information dataset to correct format
+cou_df <- cou_df %>% rename(country = Country,
+                            population = Population,
+                            english_speakers_l1 = `English_Speakers_L1`,
+                            english_speakers_l2 = `English_Speakers_L2`)
 
 
+# Rename columns in Ethnologue dataset to correct format
 eth_df <- eth_df %>% rename(country = `Country Name`,
                             english_speakers_l1 = `L1 Users`,
                             english_speakers_l2 = `L2 Users`,
@@ -86,5 +95,18 @@ summary(pri_df)
 write.csv(pri_df, "C:/Users/lordryan/Documents/GitHub/windmill_mov_subtitles/primary_language.csv", row.names = FALSE)
 
 
+#######################################
+#FINAL JOIN TO COUNTRY_INFORMATION.CSV#
+#######################################
 
+# Note that other joins were performed by Ash, this one was left to me. 
+
+cou_df <- left_join(cou_df,pri_df,c("country" = "country")) %>%
+  na.omit()
+
+summary(cou_df)
+
+
+
+write.csv(cou_df, "C:/Users/lordryan/Documents/GitHub/windmill_mov_subtitles/country_information.csv", row.names = FALSE)
 
