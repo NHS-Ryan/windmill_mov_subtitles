@@ -104,9 +104,9 @@ write.csv(pri_df, "C:/Users/lordryan/Documents/GitHub/windmill_mov_subtitles/pri
 cou_df <- left_join(cou_df,pri_df,c("country" = "country")) %>%
   na.omit()
 
-summary(cou_df)
+cou_df <- cou_df %>% mutate(primary_language = str_to_title(primary_language))
 
-
+head(cou_df)
 
 write.csv(cou_df, "C:/Users/lordryan/Documents/GitHub/windmill_mov_subtitles/country_information.csv", row.names = FALSE)
 

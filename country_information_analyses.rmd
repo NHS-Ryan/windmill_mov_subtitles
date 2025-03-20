@@ -194,3 +194,44 @@ country_information %>%
   )
 ```
 
+Raw scores table: 
+```{r}
+
+country_information %>%
+  select(country,population, primary_language_speakers,english_speakers_total,median_income,avg_gdp_change_5_years,market_score) %>%
+  mutate(market_score = round(country_information$market_score,1)) %>%
+  filter(market_score > 0) %>%
+  arrange(desc(market_score)) %>%
+  datatable(options = list(pageLength = 5, autoWidth = TRUE)) %>%
+  formatStyle(
+    'market_score',
+    background = styleColorBar(country_information$market_score, 'red'),
+    backgroundSize = '100% 100%',
+    backgroundRepeat = 'no-repeat',
+    backgroundPosition = 'center'
+  )
+
+
+```
+
+
+
+Composite scores table
+```{r}
+country_information %>%
+  select(country,median_income_score, target_population_score ,english_speakers_total,avg_gdp_change_5_years_score,market_score) %>%
+  mutate(market_score = round(country_information$market_score,1)) %>%
+  filter(market_score > 0) %>%
+  arrange(desc(market_score)) %>%
+  datatable(options = list(pageLength = 5, autoWidth = TRUE)) %>%
+  formatStyle(
+    'market_score',
+    background = styleColorBar(country_information$market_score, 'red'),
+    backgroundSize = '100% 100%',
+    backgroundRepeat = 'no-repeat',
+    backgroundPosition = 'center'
+  )
+```
+
+
+
