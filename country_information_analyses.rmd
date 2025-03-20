@@ -84,6 +84,9 @@ country_information$english_speakers_total <-
 country_information$supported_language_flag <- country_information$supported_language_flag %>%
   replace_na(1)
 
+country_information <- country_information %>%
+  filter(population > 1000000)
+
 country_information
 
 ```
