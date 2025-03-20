@@ -27,7 +27,7 @@ Source: Ethnologue database
 
 Link: https://www.ethnologue.com/language/eng/
 
-Additional processing: data in Ethnologue data was in a semi-structured format. Data was scraped using Data_Scrapping.py. A RegEx solution was applied to this semi-structured data to extract information into L1 (native speaker) and L2 (second language) speakers. 
+Additional processing: data in Ethnologue data was in a semi-structured format. Data was scraped using Data_Scrapping.py. A RegEx solution was applied to this semi-structured data to extract information into L1 (native speaker) and L2 (second language) speakers using Process_L1_L2.py. 
 
 **population.csv**
 
