@@ -5,7 +5,13 @@ Data were assembled and processed by Ryan Lord & Ashikur Rahman.
 
 # Market Score Index
 
-The Market Score Index is calculated as following: 
+The Market Score Index is intended to allow us to identify target markets for automated subtitling by taking into account 3 parameters: 
+1. How many speakers are there in a given country who speak the primary language of that country, but don't speak English as a second language
+2. Median income of country
+3. Average GDP growth over the last 5 years of the given country
+
+The Market Score Index is calculated as follows: 
+
 Firstly we filter out any countries where the primary language is part of our supported_languages.csv dataset. These languages / countries we already translate to and therefore we do not need to explore them as part of this dataset. 
 
 To calculate the Market Score Index we need 3 parameters: Target Population, Average GDP Change 5 Years & Median Income. 
@@ -14,7 +20,7 @@ To calculate the Market Score Index we need 3 parameters: Target Population, Ave
 
 Median Income & Average GDP Change 5 Years don't need any additional processing other than ranking and normalisation detailed below, but Target Population is calculated as follows: 
 
-Target Population = Population * Most Commonly Spoken Language Ratio - (english_speakers_l1 + english_speakers_l2))
+Target Population = Population * Most Commonly Spoken Language Ratio - Total English Speakers
 
 We then take the 3 parameters, rank them from highest to lowest, and normalise the result from 0 to 1. Finally we apply the following weights to give a final score out of 10: 
 Average GDP Change 5 Years * 2.5 + 
