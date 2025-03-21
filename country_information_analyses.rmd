@@ -5,14 +5,18 @@ date: "2025-03-17"
 output: html_document
 ---
 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+This notebook shows how I processed and visualised data from the country_information.csv that was created 
+
 
 Check if required packages are installed and install if necessary. 
 Add packages to library. 
-```{r,warning=FALSE}
+```{r,warning=FALSE,message=FALSE}
 if (!requireNamespace("ggplot2", quietly = TRUE)) {
   install.packages("ggplot2")
 }
@@ -29,13 +33,11 @@ if (!requireNamespace("DT", quietly = TRUE)) {
   install.packages("DT")
 }
 
-
 library(ggplot2)    # data visualisation
 library(tidyverse)  # data wrangling
 library(readr)      # import .csv from github
 library(treemapify) # create tree maps
 library(DT)         # nicely formatted tables
-
 
 ```
 
@@ -44,7 +46,6 @@ library(DT)         # nicely formatted tables
 Import data from our github repo: https://github.com/NHS-Ryan/windmill_mov_subtitles
 Some small data cleaning required to account for NULL values in the country_information.csv file
 ```{r, warning=FALSE}
-
 country_information <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/country_information.csv")
 supported_languages <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/supported_languages.csv")
 
@@ -87,59 +88,11 @@ country_information$supported_language_flag <- country_information$supported_lan
 country_information <- country_information %>%
   filter(population > 1000000)
 
+
+
 country_information
 
 ```
-
-
-We now want to do the final work to prepare our data to create our market_score. Market Score is a score out of 10 where a country scoring a full 10 points would have the largest population, highest median income & strong 5 year GDP growth:
-
-The market score takes 3 parameters: target_population ,average_gdp_change_5_years & median_income. 
-
-2 of the parameters are already available in our country_information dataframe, but target_population needs to be calculated as follows: 
-
-target_population = supported_language_flag * (primarly_language_speakers - (english_speakers_l1 + english_speakers_l2))
-median_income
-
-We then take the 3 parameters, rank them from highest to lowest, and normalise the result from 0 to 1. Finally we apply the following weights to give a final score out of 10: 
-average_gdp_change_5_years_norm * 2.5 + 
-median_income * 2.5 + 
-target_population * 5 + 
-= market_score
-
-```{r}
-
-normalise <- function(x) {
-  return((x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE)))
-}
-
-country_information$median_income_score <-
-  normalise(rank(country_information$median_income)) * 3.5
-
-country_information$avg_gdp_change_5_years_score <-
-  normalise(rank(country_information$avg_gdp_change_5_years)) * 2.5
-
-country_information$target_population_score <-
-  normalise(rank(country_information$supported_language_flag * 
-  (
-    (
-    (country_information$population * country_information$primary_language_speakers) - 
-      country_information$english_speakers_total
-    )
-   )
-  )
-  ) * 4
-
-country_information$market_score <-
-  (country_information$median_income_score + 
-     country_information$avg_gdp_change_5_years_score +
-     country_information$target_population_score) *
-  country_information$supported_language_flag
-
-
-```
-
-
 
 Create a Treemap of languages including an 'unsupported_languages' category to demonstrate how much of the overall global market we are missing. 
 ```{r}
@@ -177,6 +130,77 @@ country_information %>%
     scale_fill_brewer(palette = "Reds") +
     labs(title = "Millions of Speakers...")
 ```
+
+
+
+Add a target_population column which is calculated as follows: 
+target_population = 
+supported_language_flag * 
+((population * primary_language_speakers)  - 
+english_speakers_total)
+
+Explanation of calculation: 
+Multiply by supported_language_flag: This flag is either 0 or 1. A value of 1 indicates that we do not currently support this language for translation and therefore is a potential market for us. 
+
+population * primary_language_speakers: population is the total population of the country. primary_language_speakers is a ratio of people in that country that speak that language. For example the most commonly spoken language in India is Hindi, however only 44% of Indians actually speak Hindi
+
+- english_speakers_total: We remove all English speakers (both first and second language speakers). English speakers are not part of the population that we are targeting for our translation services. 
+
+
+Caveats for our target_population calculation: 
+We should also be removing French, German, Spanish, Italian & Portuguese speakers from our dataset as Windmill Pictures already has manual translation processes for these markets, but scraping this data from Ethnologue and implenting more RegEx to find these values for each country was not possible in the time we had for this project. 
+
+Secondly Just deducting English speakers from the primary_language_speakers value overestimates the number of English speakers that should be removed: for example in India Ethnologue estimates that there are ~268 million English speakers. Obviously not all of these people Hindi as their first language therefore just deducting English speakers from the primary_language_speakers reduces the size of the market in an unrealistic way. The level of detail required to account for this problem is not available on Ethnologue (or possibly anywhere) so we have had to make do with the calculation laid out above. 
+
+```{r}
+country_information$target_population <- 
+  round(country_information$supported_language_flag * 
+  ((country_information$population * country_information$primary_language_speakers) - 
+     country_information$english_speakers_total),0)
+
+
+# Remove countries with a target population less than a million as these markets are not the right place to start for our service. 
+country_information <- country_information %>%
+  filter(target_population > 1000000)
+                                                   
+```
+
+
+We now want to do the final work to prepare our data to create our market_score. Market Score is a score out of 10 where a country scoring a full 10 points would have the largest population, highest median income & strong 5 year GDP growth:
+
+We then take the 3 parameters and normalise the result from 0 to 1. Finally we apply the following weights to give a final score out of 10: 
+average_gdp_change_5_years_norm * 1.5 + 
+median_income * 3.5 + 
+target_population * 5 + 
+= market_score
+
+```{r}
+
+# Simple function to normalise datasets from 0 to 1. I couldn't immediately find
+# a function for this in R strangely. 
+normalise <- function(x) {
+  return((x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE)))
+}
+
+country_information$median_income_score <-
+  normalise(country_information$median_income) * 3.5
+
+country_information$avg_gdp_change_5_years_score <-
+  normalise(country_information$avg_gdp_change_5_years) * 1.5
+
+country_information$target_population_score <-
+  normalise(country_information$target_population) * 5
+
+country_information$market_score <-
+  (country_information$median_income_score + 
+     country_information$avg_gdp_change_5_years_score +
+     country_information$target_population_score) *
+  country_information$supported_language_flag
+
+
+```
+
+
 
 
 
