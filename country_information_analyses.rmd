@@ -13,7 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This notebook shows how I processed and visualised data from the country_information.csv that was created 
 
-
 Check if required packages are installed and install if necessary. 
 Add packages to library. 
 ```{r,warning=FALSE,message=FALSE}
@@ -38,6 +37,8 @@ library(tidyverse)  # data wrangling
 library(readr)      # import .csv from github
 library(treemapify) # create tree maps
 library(DT)         # nicely formatted tables
+library(htmltools)  # additional descriptions added to datatables
+
 
 ```
 
@@ -48,10 +49,11 @@ Some small data cleaning required to account for NULL values in the country_info
 ```{r, warning=FALSE}
 country_information <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/country_information.csv")
 supported_languages <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/supported_languages.csv")
-
+netflix_restricted_countries <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/netflix_restricted_countries.csv")
 
 head(country_information)
 head(supported_languages)
+head(netflix_restricted_countries)
 
 ```
 
@@ -61,9 +63,14 @@ Join to Windmill Pictures' Supported Languages information so we can exclude cou
 ```{r}
 
 supported_languages$supported_language_flag = 0
+netflix_restricted_countries$netflix_restricted_countries_flag = 0
 
 country_information <- left_join(country_information, supported_languages, 
                                  by = c("primary_language" = "supported_languages")
+                                 )
+
+country_information <- left_join(country_information, netflix_restricted_countries, 
+                                 by = c("country" = "netflix_restricted_countries")
                                  )
 
 # Disable scientific notation for values
@@ -85,13 +92,10 @@ country_information$english_speakers_total <-
 country_information$supported_language_flag <- country_information$supported_language_flag %>%
   replace_na(1)
 
-country_information <- country_information %>%
-  filter(population > 1000000)
-
-
+country_information$netflix_restricted_countries_flag <- country_information$netflix_restricted_countries_flag %>%
+  replace_na(1)
 
 country_information
-
 ```
 
 Create a Treemap of languages including an 'unsupported_languages' category to demonstrate how much of the overall global market we are missing. 
@@ -130,6 +134,16 @@ country_information %>%
     scale_fill_brewer(palette = "Reds") +
     labs(title = "Millions of Speakers...")
 ```
+
+
+Remove countries that do not allow Netflix to operate: we assume that these countries will restricted Windmill@Home also. 
+```{r}
+
+country_information <- country_information %>%
+  filter(netflix_restricted_countries_flag == 1)
+
+```
+
 
 
 
@@ -204,7 +218,246 @@ country_information$market_score <-
 
 
 
-Nicely formatted datatable with market_score:
+As an alternate to the Market Score Index I am also going to try a K Means Clustering approach: 
+```{r}
+
+# Select relevant columns & apply scaling
+data <- country_information[, c("median_income", "avg_gdp_change_5_years", "target_population")]
+scaled_data <- scale(data)
+
+# Determine the optimal number of clusters using the Elbow Method
+set.seed(123)  # For reproducibility
+wss <- sapply(1:10, function(k) kmeans(scaled_data, centers = k, nstart = 10)$tot.withinss)
+
+# Plot the Elbow Method graph
+plot(1:10, wss, type = "b", pch = 19, frame = FALSE,
+     xlab = "Number of Clusters (k)", ylab = "Total Within-Cluster Sum of Squares",
+     main = "Elbow Method for Optimal k")
+
+# Perform K-Means clustering with an optimal k (adjust based on the elbow plot)
+k <- 4  # Choose based on elbow method
+kmeans_result <- kmeans(scaled_data, centers = k, nstart = 25)
+
+# Add cluster labels to the original dataset
+country_information$cluster <- as.factor(kmeans_result$cluster)
+
+```
+
+
+
+```{r}
+
+# Visualize the clusters in a 2D plot (using the first two principal components)
+ggplot(country_information, aes(x = median_income, y = avg_gdp_change_5_years, color = cluster)) +
+  geom_point(size = 3) +
+  labs(title = "K-Means Clustering of Countries", x = "Median Income", y = "Average GDP Change Previous 5 Years") +
+  theme_minimal()
+```
+
+
+
+```{r}
+ggplot(country_information, aes(x = median_income, y = (target_population / 1000000), color = cluster)) +
+  geom_point(size = 3) +
+  labs(title = "K-Means Clustering of Countries", x = "Median Income", y = "Target Population in Millions (log scale)") +
+  theme_minimal() +
+  scale_y_log10() # Populations cover 3 orders of magnitude so log scale helps us visualise the data more easily
+```
+
+Looking at the results of the clustering we see the groups are defined by the following: 
+Cluster 1 - very high populations with strong economic growth, but currently low incomes
+Cluster 2 - Varied population (2 million to 55 million), low incomes, and negative growth
+Cluster 3 - Varied population (2 million to 251 million), low to moderate incomes & low to high growth
+Cluster 4 - Low population (with 1 exception - Japan), high incomes & moderate growth
+
+To help us grasp these clusters more effectively I have given them nicknames: 
+
+Cluster 1 - The big & getting bigger
+Cluster 2 - The small & getting smaller
+Cluster 3 - The varied middle
+Cluster 4 - The overlooked rich
+
+
+```{r}
+# Add names to dataframe:
+country_information <- 
+  country_information %>% mutate(cluster_name = 
+                                 case_when(
+                                   cluster == 1 ~ "The big & getting bigger",
+                                   cluster == 2 ~ "The small & getting smaller",
+                                   cluster == 3 ~ "The varied middle",
+                                   cluster == 4 ~ "The overlooked rich"
+                                 ))
+```
+
+
+```{r}
+
+
+tagList(
+  tags$h1(
+    style = "margin-top: 10px; font-size: 40px;",
+    "Cluster 1 - The big & getting bigger"),
+  country_information %>% 
+    filter(cluster == 1) %>%
+    select(country, target_population, avg_gdp_change_5_years, median_income) %>%
+    mutate(avg_gdp_change_5_years = round(avg_gdp_change_5_years, 1),
+           target_population = round(target_population / 1000000, 1),
+           median_income = round(median_income, 0)) %>%
+    arrange(desc(target_population)) %>%
+    rename(Country = country,
+           "Target Population (millions)" = target_population,
+           "Average GDP Change (5 Years)" = avg_gdp_change_5_years,
+           "Median Income" = median_income) %>%
+    datatable(
+      options = list(pageLength = 5, autoWidth = TRUE)
+    ) %>%
+    formatStyle(
+      'Target Population (millions)',
+      backgroundSize = '100% 100%',
+      backgroundRepeat = 'no-repeat',
+      backgroundPosition = 'center'
+    ),
+  
+  tags$p(
+    style = "margin-top: 10px; font-size: 14px;",
+    HTML("
+    The Big & Getting Bigger cluster is defined by having only 2 countries that both have massive populations: India & Indonesia. India's population is smaller than you would expect as we are only focusing on the Hindi speaking population. Both countries have low incomes, but with very strong growth. <br/>
+    <br/>
+
+Pros: large population of middle class consumers even when we account for the low median income. In addition because of these country's strong growth we should expect them to add millions of consumers each year that are now able to afford streaming services.<br/>
+<br/>
+Cons: low median income"
+  ))
+)
+
+
+```
+
+```{r}
+tagList(
+  tags$h1(
+    style = "margin-top: 10px; font-size: 40px;",
+    "Cluster 2 - The Small & Getting Smaller"),
+  country_information %>% 
+    filter(cluster == 2) %>%
+    select(country, target_population, avg_gdp_change_5_years, median_income) %>%
+    mutate(avg_gdp_change_5_years = round(avg_gdp_change_5_years, 1),
+           target_population = round(target_population / 1000000, 1),
+           median_income = round(median_income, 0)) %>%
+    arrange(desc(target_population)) %>%
+    rename(Country = country,
+           "Target Population (millions)" = target_population,
+           "Average GDP Change (5 Years)" = avg_gdp_change_5_years,
+           "Median Income" = median_income) %>%
+    datatable(
+      options = list(pageLength = 5, autoWidth = TRUE)
+    ) %>%
+    formatStyle(
+      'Target Population (millions)',
+      backgroundSize = '100% 100%',
+      backgroundRepeat = 'no-repeat',
+      backgroundPosition = 'center'
+    ),
+  
+  tags$p(
+    style = "margin-top: 10px; font-size: 14px;",
+    HTML("
+        The Small & Getting Smaller cluster is defined by having shrinking incomes.<br/>
+        <br/>
+        Pros: Some countries have large populations.<br/>
+        <br/>
+        Cons: Generally low incomes and in all cases those incomes are shrinking. Many of these countries are defined by internal or international conflict.
+    ")
+)
+
+
+
+)
+```
+
+```{r}
+tagList(
+  tags$h1(
+    style = "margin-top: 10px; font-size: 40px;",
+    "Cluster 3 - The Varied Middle"),
+  country_information %>% 
+    filter(cluster == 3) %>%
+    select(country, target_population, avg_gdp_change_5_years, median_income) %>%
+    mutate(avg_gdp_change_5_years = round(avg_gdp_change_5_years, 1),
+           target_population = round(target_population / 1000000, 1),
+           median_income = round(median_income, 0)) %>%
+    arrange(desc(target_population)) %>%
+    rename(Country = country,
+           "Target Population (millions)" = target_population,
+           "Average GDP Change (5 Years)" = avg_gdp_change_5_years,
+           "Median Income" = median_income) %>%
+    datatable(
+      options = list(pageLength = 5, autoWidth = TRUE)
+    ) %>%
+    formatStyle(
+      'Target Population (millions)',
+      backgroundSize = '100% 100%',
+      backgroundRepeat = 'no-repeat',
+      backgroundPosition = 'center'
+    ),
+  
+  tags$p(
+    style = "margin-top: 10px; font-size: 14px;",
+    HTML("
+        The Varied Middle Cluster is difficult to easily define, it features countries with large populations and low incomes (e.g. Pakistan) and small populations with high incomes (e.g. Lithuania). Overall this segment is too varied to treat as a sensible group. A separate piece of analysis on this group individually is probably the best approach if we look at this group in particular.<br/>
+        <br/>
+        Pros: very varied with several opportunities buried within the group. In particular if we were to treat all the Arabic speaking countries as a single market they would likely be grouped with the Big & Getting Bigger cluster..<br/>
+        <br/>
+        Cons: too diverse to treat as a single unit and to approach with a single strategy.
+    ")
+)
+)
+```
+
+
+```{r}
+tagList(
+  tags$h1(
+    style = "margin-top: 10px; font-size: 40px;",
+    "Cluster 3 - The Overlooked Rich"),
+  country_information %>% 
+    filter(cluster == 4) %>%
+    select(country, target_population, avg_gdp_change_5_years, median_income) %>%
+    mutate(avg_gdp_change_5_years = round(avg_gdp_change_5_years, 1),
+           target_population = round(target_population / 1000000, 1),
+           median_income = round(median_income, 0)) %>%
+    arrange(desc(target_population)) %>%
+    rename(Country = country,
+           "Target Population (millions)" = target_population,
+           "Average GDP Change (5 Years)" = avg_gdp_change_5_years,
+           "Median Income" = median_income) %>%
+    datatable(
+      options = list(pageLength = 5, autoWidth = TRUE)
+    ) %>%
+    formatStyle(
+      'Target Population (millions)',
+      backgroundSize = '100% 100%',
+      backgroundRepeat = 'no-repeat',
+      backgroundPosition = 'center'
+    ),
+  
+  tags$p(
+    style = "margin-top: 10px; font-size: 14px;",
+    HTML("
+        The Overlooked Rich cluster is defined by countries that have high median incomes, but do not speak one of our core translation languages (English, Portuguese, Spanish, German, Italian). Japan makes up 94% of the population of this cluster. <br/>
+        <br/>
+        Pros: High incomes with reasonable GDP growth and already well established media markets.<br/>
+        <br/>
+        Cons: Other than Japan this cluster is made up of very small population countries.
+    ")
+)
+)
+```
+
+
+
+Nicely formatted datatable with market_score: 
 ```{r}
 country_information %>%
   select(country,primary_language,market_score) %>%
@@ -261,4 +514,39 @@ country_information %>%
 ```
 
 
+Create the market_score.csv file based on country_information.csv with all of the necessary processing completed in line with requirements for the dashboard we are going to create. 
+
+```{r}
+
+data <- country_information %>%
+  select(-supported_language_flag,-cluster,-netflix_restricted_countries_flag)
+
+
+# Rename columns
+colnames(data) <- c("Country", "Population (millions)", "Native English Speakers (millions)", 
+                    "Second Language English Speakers (millions)", "Median Income ($)", 
+                    "5 Year Average GDP Change %", "Most Commonly Spoken Language", 
+                    "Ratio of Speakers of Most Common Language", "English Speakers Total (millions)", 
+                    "Median Income Score", "Average GDP Change Score", "Target Population Score", "Market Score",
+                    "Target Population (millions)","Cluster Name")
+
+# Convert Population to millions and rename column
+data <- data %>%
+  mutate(`Population (millions)` = round(`Population (millions)` / 1e6, 1),
+         `Native English Speakers (millions)` = round(`Native English Speakers (millions)` / 1e6,1),
+         `Second Language English Speakers (millions)` = round(`Second Language English Speakers (millions)` / 1e6,1),
+         `English Speakers Total (millions)` = round(`English Speakers Total (millions)` / 1e6,1),
+         `Target Population (millions)` = round(`Target Population (millions)` / 1e6,1),
+         `Median Income Score` = round(`Median Income Score`, 1),
+         `Average GDP Change Score` = round(`Average GDP Change Score`, 1),
+         `Target Population Score` = round(`Target Population Score`, 1),
+         `Market Score` = round(`Market Score`, 1),
+         `Median Income ($)` = round(`Median Income ($)`, 0),
+         `5 Year Average GDP Change %` = round(`5 Year Average GDP Change %`, 2),
+         `Target Population (millions)` = round(`Target Population (millions)`, 1))
+
+write.csv(data,"C:/Users/lordryan/Documents/GitHub/windmill_mov_subtitles/market_score.csv")
+
+
+```
 
