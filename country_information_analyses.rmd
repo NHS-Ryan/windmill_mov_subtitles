@@ -1,21 +1,34 @@
 ---
-title: "Automated Subtitling Market Segmentation"
-author: "Ryan Lord"
+title: "Summative 1 - Data Science Boot Camp: Windmill Pictures - Automated Subtitling Market Segmentation"
+author: "-"
 date: "2025-03-17"
 output: html_document
 ---
-
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-This notebook shows how I processed and visualised data from the country_information.csv that was created 
 
-Check if required packages are installed and install if necessary. 
-Add packages to library. 
-```{r,warning=FALSE,message=FALSE}
+<font size="10"><B>Introduction</B></font>
+
+As laid out in Summative 2 my team's project was to introduce automated subtitling to Windmill Pictures new Windmill@Home service. 
+
+My particular task was to provide any required Data Analysis / Science related tasks.The core product I delivered was the Market Score Index which helps us understand what countries may be appropriate for automated subtitling. 
+
+I think my most significant contributions to the group project were: 
+
+1. <B>Leadership & Organisation</B>: I led the group to agree daily meetings to review progress so far. I also agreed that we would use Github for storage of data & code. I also set up a Whatsapp Group that enabled us to coordinate well across the week. 
+2. <B>Data Science support</B>: I created all data visualisations for the group including an interactive Shiny Dashboard. In addition I used K Means Clustering to help us identify countries that may be appropriate markets for our automated translation services. I also used linear regression as an approach to assess the quality of the English Proficiency Index (EPI)<sup>5</sup> including appropriate interpretation of the p-values and r<sup>2</sup>.
+3. <B>Requirements Gathering</B>: I led the group to lay out what our basic requirements were and laid them out clearly as shown in the Formative assessment for this project. 
+4. <B>Collaboration & Co-operation</B>: I worked well with other members of the group particularly my Data Engineer colleague. Our tasks involved significant integration and use of Github's facilities to ensure that our code worked together. 
+5. <B>Exploring Resources</B>: I used the resources we had available effectively selecting technologies and using the Northeastern University library system to access the Ethnologue Database. I also worked to assign tasks across the group to ensure that we were all working towards a coherent end goal. 
+
+In the rest of this notebook you can find the data cleaning, reporting, plots and analysis I performed throughout this project. At the end you can find a link to a live shiny dashboard and links to the additional code that powers this. 
+
+The github repository for this work can be found here: https://github.com/NHS-Ryan/windmill_mov_subtitles
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 if (!requireNamespace("ggplot2", quietly = TRUE)) {
   install.packages("ggplot2")
 }
@@ -31,6 +44,10 @@ if (!requireNamespace("treemapify", quietly = TRUE)) {
 if (!requireNamespace("DT", quietly = TRUE)) {
   install.packages("DT")
 }
+if (!requireNamespace("htmltools", quietly = TRUE)) {
+  install.packages("htmltools")
+}
+
 
 library(ggplot2)    # data visualisation
 library(tidyverse)  # data wrangling
@@ -42,24 +59,29 @@ library(htmltools)  # additional descriptions added to datatables
 
 ```
 
+<font size="10"><B>Data Import & Cleaning</B></font>
 
+Before completing the analysis below we had to create the initial Country Information file which gave us the information we needed to assess what markets would be appropriate for automated subtitling. 
 
-Import data from our github repo: https://github.com/NHS-Ryan/windmill_mov_subtitles
-Some small data cleaning required to account for NULL values in the country_information.csv file
-```{r, warning=FALSE}
+We agreed requirements for the Country Information file as a group and my Data Engineer colleague and myself divided the work between us to find the required sources. In the end we sourced the median income & average GDP growth from the World Bank<sup>1</sup>,<sup>2</sup> & information relating to the most commonly spoken language in each country, number of native English speakers & second language English speakers per country from the Ethnologue Database<sup>3</sup>.
+
+Note that we initially considered using the EPI<sup>5</sup> as a source for the fraction of people in a given country that were proficient in English. However I found in the methodology section of the index that participants used for the EPI were not randomly selected and instead it was a convenience sample of people enrolled in particpating English language schools across the world. Initially we were struggling to find any source for these data so we did some analysis to understand whether the EPI was a source worth working with. We had a good quality data source for European countries: specifically the Eurobarometer Poll 'Europeans & Their Languages'<sup>6</sup>. This poll had a large sample of participants across the EU and was appropriately randomised. Given this I assumed it was a higher quality source for the data we needed. I extracted the EU countries from the EPI & joined this with the Eurobarometer data for matching countries. I performed a linear regression on this data which had a statistically significant correlation, but only a r<sup>2</sup> of 0.17. Given this low correlation we felt that this was not an appropriate data source and instead pursued other avenues which ended with us finding and using the Ethnologue Database. 
+
+In addition to the core Country Information file that we constructed from the above sources I am also using data that tells us what countries Netflix is restricted in<sup>4</sup>. This helps us filter out markets that Windmill Pictures will not be able to launch Windmill@Home in. 
+
+Finally we use a Supported Languages file that shows which languages that Windmill Pictures already translates into (English, Spanish, Italian, German, French & Portuguese). We will use this to remove countries where their most commonly spoken language is already supported by Windmill Pictures and therefore do not require our proposed automated subtitling solution.
+
+The individual .csvs that are combined to make the Country Information file and details of how they were processed and combined can be found in the above repository mentioned at the top of this section. Final processing of this file is performed below; starting with the initial import of relevant files: 
+
+```{r, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
 country_information <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/country_information.csv")
 supported_languages <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/supported_languages.csv")
 netflix_restricted_countries <- read_csv("https://raw.githubusercontent.com/NHS-Ryan/windmill_mov_subtitles/refs/heads/main/netflix_restricted_countries.csv")
 
-head(country_information)
-head(supported_languages)
-head(netflix_restricted_countries)
-
 ```
 
 
-
-Join to Windmill Pictures' Supported Languages information so we can exclude countries with languages we are already working with. 
+This code joins the Netflix Restricted Countries & Supported Languages file to our main Country Information table. We also do some basic tidying by combining the English L1 (native speakers) & English L2 (second language speakers) into a single Total English Speakers column. 
 ```{r}
 
 supported_languages$supported_language_flag = 0
@@ -75,7 +97,6 @@ country_information <- left_join(country_information, netflix_restricted_countri
 
 # Disable scientific notation for values
 options(scipen = 999) 
-
 
 # Replace "NULL" strings with 0 in english_speakers_l1 & convert to numeric
 country_information$english_speakers_l1[country_information$english_speakers_l1 == "NULL"] <- 0
@@ -136,8 +157,7 @@ country_information %>%
 ```
 
 
-Remove countries that do not allow Netflix to operate: we assume that these countries will restricted Windmill@Home also. 
-```{r}
+```{r,echo=FALSE}
 
 country_information <- country_information %>%
   filter(netflix_restricted_countries_flag == 1)
@@ -147,24 +167,12 @@ country_information <- country_information %>%
 
 
 
-Add a target_population column which is calculated as follows: 
-target_population = 
-supported_language_flag * 
-((population * primary_language_speakers)  - 
-english_speakers_total)
+<font size="10"><B>Target Population</B></font>
 
-Explanation of calculation: 
-Multiply by supported_language_flag: This flag is either 0 or 1. A value of 1 indicates that we do not currently support this language for translation and therefore is a potential market for us. 
+We are now going to add a Target Population column.This column gives us the population of a country that speaks the most commonly spoken language in that country minus any English Speakers. This gives us an understanding of how many people in that country are at least potentially interested in automated subtitling of English Language movies in the Windmill Pictures catalogue. 
 
-population * primary_language_speakers: population is the total population of the country. primary_language_speakers is a ratio of people in that country that speak that language. For example the most commonly spoken language in India is Hindi, however only 44% of Indians actually speak Hindi
-
-- english_speakers_total: We remove all English speakers (both first and second language speakers). English speakers are not part of the population that we are targeting for our translation services. 
-
-
-Caveats for our target_population calculation: 
-We should also be removing French, German, Spanish, Italian & Portuguese speakers from our dataset as Windmill Pictures already has manual translation processes for these markets, but scraping this data from Ethnologue and implenting more RegEx to find these values for each country was not possible in the time we had for this project. 
-
-Secondly Just deducting English speakers from the primary_language_speakers value overestimates the number of English speakers that should be removed: for example in India Ethnologue estimates that there are ~268 million English speakers. Obviously not all of these people Hindi as their first language therefore just deducting English speakers from the primary_language_speakers reduces the size of the market in an unrealistic way. The level of detail required to account for this problem is not available on Ethnologue (or possibly anywhere) so we have had to make do with the calculation laid out above. 
+<B>Caveats for our target_population calculation:</B>
+Simply deducting English speakers from the primary_language_speakers value overestimates the number of English speakers that should be removed: for example in India Ethnologue estimates that there are ~268 million English speakers. Obviously not all of these people Hindi as their first language therefore just deducting English speakers from the primary_language_speakers reduces the size of the market in an unrealistic way. The level of detail required to account for this problem is not available on Ethnologue (or possibly anywhere) so we have had to make do with the calculation laid out above. 
 
 ```{r}
 country_information$target_population <- 
@@ -180,18 +188,17 @@ country_information <- country_information %>%
 ```
 
 
-We now want to do the final work to prepare our data to create our market_score. Market Score is a score out of 10 where a country scoring a full 10 points would have the largest population, highest median income & strong 5 year GDP growth:
 
-We then take the 3 parameters and normalise the result from 0 to 1. Finally we apply the following weights to give a final score out of 10: 
-average_gdp_change_5_years_norm * 1.5 + 
-median_income * 3.5 + 
-target_population * 5 + 
-= market_score
+
+<font size="10"><B>Market Score</B></font>
+
+We now want to do the final work to prepare our data to create our Market Score. Market Score is a score out of 10 where a country scoring a full 10 points would have the largest target population, highest median income and highest average 5 year GDP growth. The score is weighted as follows: 4 points for target population, 3.5 points for median income & 1.5 points for average 5 year GDP growth. 
+
+The Market Score is intended to help us understand which markets are best for us to target with our automated subtitling. 
 
 ```{r}
 
-# Simple function to normalise datasets from 0 to 1. I couldn't immediately find
-# a function for this in R strangely. 
+# Simple function to normalise datasets from 0 to 1. 
 normalise <- function(x) {
   return((x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE)))
 }
@@ -216,9 +223,9 @@ country_information$market_score <-
 
 
 
+<font size="10"><B>Market Clustering</B></font>
 
-
-As an alternate to the Market Score Index I am also going to try a K Means Clustering approach: 
+As an alternate to the Market Score I am also using K Means Clustering approach using the same variables as were used for the Market Score: target population, median income, 5 year average GDP growth. 
 ```{r}
 
 # Select relevant columns & apply scaling
@@ -234,7 +241,7 @@ plot(1:10, wss, type = "b", pch = 19, frame = FALSE,
      xlab = "Number of Clusters (k)", ylab = "Total Within-Cluster Sum of Squares",
      main = "Elbow Method for Optimal k")
 
-# Perform K-Means clustering with an optimal k (adjust based on the elbow plot)
+# Perform K-Means clustering with an optimal k (adjusted to 4 based on elbow plot results)
 k <- 4  # Choose based on elbow method
 kmeans_result <- kmeans(scaled_data, centers = k, nstart = 25)
 
@@ -243,34 +250,36 @@ country_information$cluster <- as.factor(kmeans_result$cluster)
 
 ```
 
+<font size="10"><B>Cluster Visualisations & Summaries</B></font>
 
+Here we can see scatter plots showing the relationships between median income and our other two variables: 5 year average GDP change & target population. 
 
-```{r}
+These scatter plots help us understand how the clusters were formed by the K Means algorithm and how to interpret them effectively. 
 
-# Visualize the clusters in a 2D plot (using the first two principal components)
+```{r,echo=FALSE}
+
 ggplot(country_information, aes(x = median_income, y = avg_gdp_change_5_years, color = cluster)) +
   geom_point(size = 3) +
-  labs(title = "K-Means Clustering of Countries", x = "Median Income", y = "Average GDP Change Previous 5 Years") +
+  labs(title = "Target Population vs Average GDP Growth", x = "Median Income", y = "Average GDP Change Previous 5 Years") +
   theme_minimal()
 ```
 
 
-
-```{r}
+```{r,echo=FALSE}
 ggplot(country_information, aes(x = median_income, y = (target_population / 1000000), color = cluster)) +
   geom_point(size = 3) +
-  labs(title = "K-Means Clustering of Countries", x = "Median Income", y = "Target Population in Millions (log scale)") +
+  labs(title = "Target Population (log) vs Median Income", x = "Median Income", y = "Target Population in Millions (log scale)") +
   theme_minimal() +
   scale_y_log10() # Populations cover 3 orders of magnitude so log scale helps us visualise the data more easily
 ```
 
-Looking at the results of the clustering we see the groups are defined by the following: 
+Looking at the scatter plots above and the results we see the groups are defined by the following: 
 Cluster 1 - very high populations with strong economic growth, but currently low incomes
 Cluster 2 - Varied population (2 million to 55 million), low incomes, and negative growth
 Cluster 3 - Varied population (2 million to 251 million), low to moderate incomes & low to high growth
 Cluster 4 - Low population (with 1 exception - Japan), high incomes & moderate growth
 
-To help us grasp these clusters more effectively I have given them nicknames: 
+To help us grasp these clusters more effectively I have given them names: 
 
 Cluster 1 - The big & getting bigger
 Cluster 2 - The small & getting smaller
@@ -278,7 +287,7 @@ Cluster 3 - The varied middle
 Cluster 4 - The overlooked rich
 
 
-```{r}
+```{r,echo=FALSE}
 # Add names to dataframe:
 country_information <- 
   country_information %>% mutate(cluster_name = 
@@ -291,7 +300,8 @@ country_information <-
 ```
 
 
-```{r}
+Interactive tables with each cluster with names and descriptions highlighting their key characteristics plus pros and cons to help us understand which markets to target. 
+```{r,echo=FALSE}
 
 
 tagList(
@@ -334,7 +344,7 @@ Cons: low median income"
 
 ```
 
-```{r}
+```{r,echo=FALSE}
 tagList(
   tags$h1(
     style = "margin-top: 10px; font-size: 40px;",
@@ -376,7 +386,7 @@ tagList(
 )
 ```
 
-```{r}
+```{r,echo=FALSE}
 tagList(
   tags$h1(
     style = "margin-top: 10px; font-size: 40px;",
@@ -416,11 +426,11 @@ tagList(
 ```
 
 
-```{r}
+```{r,echo=FALSE}
 tagList(
   tags$h1(
     style = "margin-top: 10px; font-size: 40px;",
-    "Cluster 3 - The Overlooked Rich"),
+    "Cluster 4 - The Overlooked Rich"),
   country_information %>% 
     filter(cluster == 4) %>%
     select(country, target_population, avg_gdp_change_5_years, median_income) %>%
@@ -457,8 +467,10 @@ tagList(
 
 
 
-Nicely formatted datatable with market_score: 
-```{r}
+<font size="10"><B>Market Score Tables</B></font>
+
+Overall summary table: 
+```{r,echo=FALSE}
 country_information %>%
   select(country,primary_language,market_score) %>%
   mutate(market_score = round(country_information$market_score,1)) %>%
@@ -475,7 +487,7 @@ country_information %>%
 ```
 
 Raw scores table: 
-```{r}
+```{r,echo=FALSE}
 
 country_information %>%
   select(country,population, primary_language_speakers,english_speakers_total,median_income,avg_gdp_change_5_years,market_score) %>%
@@ -494,10 +506,8 @@ country_information %>%
 
 ```
 
-
-
 Composite scores table
-```{r}
+```{r,echo=FALSE}
 country_information %>%
   select(country,median_income_score, target_population_score ,english_speakers_total,avg_gdp_change_5_years_score,market_score) %>%
   mutate(market_score = round(country_information$market_score,1)) %>%
@@ -513,8 +523,9 @@ country_information %>%
   )
 ```
 
+<font size="10"><B>Creation of Market Score .csv</B></font>
 
-Create the market_score.csv file based on country_information.csv with all of the necessary processing completed in line with requirements for the dashboard we are going to create. 
+This code creates the final Market Score file which will forms the final tidied dataset that the above analysis has resulted in. This dataset is the basis for the final Shiny Dashboard that can be found here and gives users the ability to explore the results for themselves:  
 
 ```{r}
 
@@ -522,7 +533,7 @@ data <- country_information %>%
   select(-supported_language_flag,-cluster,-netflix_restricted_countries_flag)
 
 
-# Rename columns
+# Rename columns for readability
 colnames(data) <- c("Country", "Population (millions)", "Native English Speakers (millions)", 
                     "Second Language English Speakers (millions)", "Median Income ($)", 
                     "5 Year Average GDP Change %", "Most Commonly Spoken Language", 
@@ -530,7 +541,7 @@ colnames(data) <- c("Country", "Population (millions)", "Native English Speakers
                     "Median Income Score", "Average GDP Change Score", "Target Population Score", "Market Score",
                     "Target Population (millions)","Cluster Name")
 
-# Convert Population to millions and rename column
+# Convert values into sensible values with appropriate rounding for readability. 
 data <- data %>%
   mutate(`Population (millions)` = round(`Population (millions)` / 1e6, 1),
          `Native English Speakers (millions)` = round(`Native English Speakers (millions)` / 1e6,1),
@@ -545,8 +556,57 @@ data <- data %>%
          `5 Year Average GDP Change %` = round(`5 Year Average GDP Change %`, 2),
          `Target Population (millions)` = round(`Target Population (millions)`, 1))
 
-write.csv(data,"C:/Users/lordryan/Documents/GitHub/windmill_mov_subtitles/market_score.csv")
-
+# Line commented out as will not execute unless on local machine. 
+# write.csv(data,"C:/Users/lordryan/Documents/GitHub/windmill_mov_subtitles/market_score.csv")
 
 ```
+
+<br>
+<br>
+
+<font size="10"><B>Final Analysis</B></font><br>
+The top 5 countries by Market Score are: India, Indonesia, Sweden, Japan, Qatar. All of these countries belong to either Cluster 1 - Big & Getting Bigger, or Cluster 4 - The Overlooked Rich. This gives me confidence that the Market Scores that we have generated are pointing us in the right direction. 
+
+In the end I would recommend that we focus on 3 countries: 
+1. India
+2. Indonesia
+3. Japan
+
+Together these 3 countries represent a target population* of 748 million people for our automated translation. This market rivals the entire English Speaking market of 813 million people.  
+
+While our strategy will have to account for the significant differences between Japan vs India / Indonesia as demonstrated by the clustering work laid out here the sheer scale of the opportunity clearly justifies this time and financial investment. 
+
+In particular the Indian & Indonesian markets show strong GDP & population growth which means that if we are successful in these countries we can expect to continue to reap an increase in our customer base simply off the back of their growth.
+
+
+*Most commonly spoken language in country minus English speakers in country
+
+<br>
+<br>
+
+<font size="10"><B>Shiny Dashboard</B></font>
+
+The dashboard I created for this project can be found here: https://ryan-andstuff.shinyapps.io/country_information_explorer/
+
+The underlying code that generates this dashboard can be found here: https://github.com/NHS-Ryan/windmill_mov_subtitles/tree/main/ShinyApp
+
+<br>
+<br>
+
+<font size="10"><B>References</B></font>
+
+
+<p><sup>1</sup> World Bank (2021) <em>Adjusted net national income per capita (current US$)</em>. Available at: <a href="https://databank.worldbank.org/reports.aspx?source=2&series=NY.ADJ.NNTY.PC.CD&country=#" target="_blank">
+World Bank Database</a>. 
+
+<p><sup>2</sup> World Bank (2019–2023) <em>GDP growth (annual %)</em>.  Available at: <a href="https://databank.worldbank.org/reports.aspx?source=2&series=NY.GDP.MKTP.KD.ZG&country=)" target="_blank">
+World Bank Database</a>.</p>
+
+<p><sup>3</sup> Ethnologue (n.d.) <em>Ethnologue database</em>.  Available at: <a href="https://www.ethnologue.com/language/eng/" target="_blank">Ethnologue</a>.</p>
+
+<p><sup>4</sup> Netflix (n.d.) <em>How many countries is Netflix available in?</em>.  Available at: <a href="https://help.netflix.com/en/node/14164" target="_blank">Netflix Help Center</a>.</p>
+
+<p><sup>5</sup> EF Education First (2024) <em>EF English Proficiency Index 2024</em>. Available at: <a href="https://www.ef.com/wwen/epi/" target="_blank">https://www.ef.com/wwen/epi/</a>.</p>
+
+<p><sup>6</sup> European Commission (2024) <em>Europeans and Their Languages</em>. Special Eurobarometer 540. Available at: <a href="https://europa.eu/eurobarometer/surveys/detail/2979" target="_blank">https://europa.eu/eurobarometer/surveys/detail/2979</a>.</p>
 
